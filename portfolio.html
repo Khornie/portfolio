@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Dev Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #F8F7F4;
+    --text: #1a1a1a;
+    --text-secondary: #6b6b6b;
+    --accent: #2d5cff;
+    --accent-soft: #eef2ff;
+    --border: #e4e2de;
+    --card-bg: #ffffff;
+    --tag-bg: #f0efec;
+    --radius: 14px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.03);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(248,247,244,0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    transition: box-shadow 0.3s;
+  }
+  nav.scrolled { box-shadow: var(--shadow-sm); }
+  .nav-inner {
+    max-width: 1120px; margin: 0 auto;
+    padding: 0 32px; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.35rem; color: var(--text);
+    text-decoration: none; letter-spacing: -0.02em;
+  }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--text-secondary);
+    font-size: 0.88rem; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ── HERO ── */
+  .hero {
+    max-width: 1120px; margin: 0 auto;
+    padding: 160px 32px 100px;
+  }
+  .hero-eyebrow {
+    font-size: 0.82rem; font-weight: 500;
+    color: var(--accent); letter-spacing: 0.08em;
+    text-transform: uppercase; margin-bottom: 16px;
+    opacity: 0; animation: fadeUp 0.6s 0.1s forwards;
+  }
+  .hero h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 400; line-height: 1.1;
+    letter-spacing: -0.03em; max-width: 700px;
+    opacity: 0; animation: fadeUp 0.6s 0.25s forwards;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero-description {
+    margin-top: 24px; font-size: 1.1rem;
+    color: var(--text-secondary); max-width: 520px; line-height: 1.7;
+    opacity: 0; animation: fadeUp 0.6s 0.4s forwards;
+  }
+  .hero-cta {
+    margin-top: 36px; display: flex; gap: 14px; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.6s 0.55s forwards;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px; border-radius: 50px;
+    font-size: 0.9rem; font-weight: 600;
+    text-decoration: none; transition: all 0.25s;
+    cursor: pointer; border: none; font-family: inherit;
+  }
+  .btn-primary { background: var(--text); color: #fff; }
+  .btn-primary:hover {
+    background: var(--accent); transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  .btn-secondary {
+    background: transparent; color: var(--text);
+    border: 1.5px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--text); transform: translateY(-1px); }
+
+  /* ── SECTIONS ── */
+  section { max-width: 1120px; margin: 0 auto; padding: 80px 32px; }
+  .section-label {
+    font-size: 0.78rem; font-weight: 600;
+    color: var(--accent); letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 400; letter-spacing: -0.02em;
+    margin-bottom: 48px;
+  }
+
+  /* ── PROJECT CARDS ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+  .project-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s;
+    cursor: pointer;
+    opacity: 0; transform: translateY(30px);
+  }
+  .project-card.visible { opacity: 1; transform: translateY(0); }
+  .project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+  }
+  .project-media {
+    position: relative; width: 100%;
+    aspect-ratio: 16 / 10; overflow: hidden;
+    background: var(--tag-bg);
+  }
+    .project-media img,
+    .project-media video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    .project-card:hover .project-media img,
+    .project-card:hover .project-media video {
+        transform: scale(1.03);
+    }
+  .project-media .placeholder {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    width: 100%; height: 100%;
+    color: var(--text-secondary); font-size: 0.85rem; gap: 8px;
+  }
+  .placeholder-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+  }
+  .project-info { padding: 24px; }
+  .project-info h3 {
+    font-size: 1.15rem; font-weight: 700;
+    margin-bottom: 8px; letter-spacing: -0.01em;
+  }
+  .project-info p {
+    color: var(--text-secondary); font-size: 0.88rem;
+    line-height: 1.6; margin-bottom: 16px;
+  }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    padding: 4px 12px; border-radius: 50px;
+    background: var(--tag-bg); font-size: 0.76rem;
+    font-weight: 500; color: var(--text-secondary);
+  }
+  .tag.accent { background: var(--accent-soft); color: var(--accent); }
+  .card-hint {
+    display: flex; align-items: center; gap: 6px;
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 0.78rem; font-weight: 600;
+    color: var(--accent);
+    transition: gap 0.3s;
+  }
+  .project-card:hover .card-hint { gap: 10px; }
+  .card-hint svg { width: 14px; height: 14px; }
+  .project-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 12px;
+    padding: 5px 12px; border-radius: 50px;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 0.78rem; font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    width: fit-content;
+  }
+  .project-link:hover {
+    background: var(--accent); color: #fff;
+  }
+  .project-link svg { width: 13px; height: 13px; }
+  .modal-project-link {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 14px; border-radius: 10px;
+    background: var(--accent-soft); color: var(--accent);
+    border: 1px solid rgba(45,92,255,0.2);
+    font-size: 0.82rem; font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    white-space: nowrap; width: fit-content;
+  }
+  .modal-project-link:hover {
+    background: rgba(45,92,255,0.15);
+    border-color: rgba(45,92,255,0.35);
+  }
+  .modal-project-link svg { width: 14px; height: 14px; }
+  .modal-header-right {
+    display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+  }
+
+  /* ── MODAL OVERLAY ── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.35s, visibility 0.35s;
+  }
+  .modal-overlay.active { opacity: 1; visibility: visible; }
+  .modal-overlay.active .modal { transform: translateY(0) scale(1); opacity: 1; }
+
+  .modal {
+    background: var(--bg);
+    width: 96vw; max-width: 1200px;
+    height: 88vh; max-height: 820px;
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.2);
+    transform: translateY(30px) scale(0.97);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.35s;
+  }
+
+  /* Modal Header */
+  .modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--card-bg);
+    flex-shrink: 0;
+  }
+  .modal-header-left { display: flex; align-items: center; gap: 16px; }
+  .modal-header-icon {
+    width: 42px; height: 42px; border-radius: 10px;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+  }
+  .modal-header h2 {
+    font-size: 1.2rem; font-weight: 700; letter-spacing: -0.01em;
+  }
+  .modal-header .modal-subtitle {
+    font-size: 0.82rem; color: var(--text-secondary); font-weight: 400;
+  }
+  .modal-close {
+    width: 38px; height: 38px; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--bg);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; color: var(--text-secondary);
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .modal-close:hover { background: var(--card-bg); color: var(--text); border-color: var(--text); }
+
+  /* Modal Body: Sidebar + Content */
+  .modal-body {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    flex: 1; overflow: hidden;
+  }
+
+  /* Sidebar */
+  .modal-sidebar {
+    padding: 24px 0;
+    border-right: 1px solid var(--border);
+    background: var(--card-bg);
+    overflow-y: auto;
+  }
+  .sidebar-section {
+    padding: 0 20px; margin-bottom: 8px;
+  }
+  .sidebar-section-label {
+    font-size: 0.68rem; font-weight: 600;
+    color: var(--text-secondary); letter-spacing: 0.08em;
+    text-transform: uppercase; margin-bottom: 8px;
+    padding: 0 8px;
+  }
+  .sidebar-link {
+    display: block; padding: 9px 14px;
+    border-radius: 8px; text-decoration: none;
+    font-size: 0.85rem; font-weight: 500;
+    color: var(--text-secondary);
+    transition: all 0.2s; cursor: pointer;
+    border: none; background: none; width: 100%;
+    text-align: left; font-family: inherit;
+  }
+  .sidebar-link:hover { background: var(--tag-bg); color: var(--text); }
+  .sidebar-link.active {
+    background: var(--accent-soft); color: var(--accent); font-weight: 600;
+  }
+
+  /* Scrollable Content */
+  .modal-content {
+    padding: 32px 40px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+  }
+
+  /* Topic Sections */
+  .topic-section {
+    margin-bottom: 48px;
+    scroll-margin-top: 20px;
+  }
+  .topic-section:last-child { margin-bottom: 24px; }
+  .topic-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 20px; padding-bottom: 14px;
+    border-bottom: 2px solid var(--border);
+  }
+  .topic-number {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+  }
+  .topic-header h3 {
+    font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em;
+  }
+  .topic-header .topic-type {
+    margin-left: auto;
+    padding: 3px 10px; border-radius: 50px;
+    font-size: 0.7rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .type-technical { background: #eef6ee; color: #2d7a3a; }
+  .type-design { background: #fef3e6; color: #b5720a; }
+  .type-process { background: #eee8f7; color: #6b3fa0; }
+
+  /* Topic Layout: GIF on top, points below */
+  .topic-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+    .topic-gif {
+        width: 100%;
+        border-radius: 10px;
+        overflow: hidden;
+        background: var(--tag-bg);
+        border: 1px solid var(--border);
+    }
+        .topic-gif img,
+        .topic-gif video {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+  .topic-gif .placeholder {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    width: 100%; height: 100%;
+    color: var(--text-secondary); font-size: 0.82rem; gap: 6px;
+  }
+  .topic-gif .placeholder-icon {
+    width: 34px; height: 34px; border-radius: 8px;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+  }
+
+  /* Talking Points */
+  .talking-points { display: flex; flex-direction: column; gap: 12px; }
+  .talking-point {
+    display: flex; gap: 14px;
+    padding: 16px 18px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .talking-point:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-sm);
+  }
+  .tp-bullet {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); flex-shrink: 0;
+    margin-top: 8px;
+  }
+  .tp-content { flex: 1; }
+  .tp-content strong {
+    display: block; font-size: 0.9rem;
+    font-weight: 600; margin-bottom: 4px;
+  }
+  .tp-content span {
+    font-size: 0.85rem; color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── SKILLS ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+  .skill-group {
+    padding: 28px; background: var(--card-bg);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .skill-group:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .skill-group-icon {
+    width: 42px; height: 42px; border-radius: 10px;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; margin-bottom: 16px;
+  }
+  .skill-group h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 10px; }
+  .skill-list { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+  .skill-list li {
+    padding: 4px 12px; border-radius: 50px;
+    background: var(--tag-bg); font-size: 0.78rem;
+    font-weight: 500; color: var(--text-secondary);
+  }
+
+  /* ── ABOUT ── */
+  .about-content {
+    display: grid; grid-template-columns: 200px 1fr;
+    gap: 48px; align-items: start;
+  }
+  .about-photo {
+    width: 200px; height: 200px; border-radius: var(--radius);
+    background: var(--tag-bg); border: 1px solid var(--border);
+    overflow: hidden; display: flex; align-items: center;
+    justify-content: center; color: var(--text-secondary); font-size: 0.85rem;
+  }
+  .about-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .about-text h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.6rem; font-weight: 400;
+    margin-bottom: 16px; letter-spacing: -0.01em;
+  }
+  .about-text p {
+    color: var(--text-secondary); font-size: 0.95rem;
+    line-height: 1.8; margin-bottom: 14px; max-width: 560px;
+  }
+
+  /* ── CONTACT ── */
+  .contact-section { text-align: center; padding: 100px 32px; }
+  .contact-links {
+    display: flex; justify-content: center;
+    gap: 16px; margin-top: 32px; flex-wrap: wrap;
+  }
+  .contact-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px; border-radius: 50px;
+    border: 1.5px solid var(--border);
+    text-decoration: none; color: var(--text);
+    font-size: 0.9rem; font-weight: 600; transition: all 0.25s;
+  }
+  .contact-link:hover {
+    border-color: var(--accent); color: var(--accent);
+    transform: translateY(-2px); box-shadow: var(--shadow-md);
+  }
+  .contact-link svg { width: 18px; height: 18px; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center; padding: 40px 32px;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary); font-size: 0.82rem;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .projects-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    .projects-grid { grid-template-columns: 1fr; }
+    .about-content {
+      grid-template-columns: 1fr;
+      justify-items: center; text-align: center;
+    }
+    .about-text p { max-width: 100%; }
+    .nav-links { gap: 20px; }
+    .hero { padding: 130px 20px 70px; }
+    section { padding: 60px 20px; }
+    .modal { width: 98vw; height: 94vh; border-radius: 14px; }
+    .modal-body { grid-template-columns: 1fr; }
+    .modal-sidebar {
+      border-right: none; border-bottom: 1px solid var(--border);
+      padding: 16px 0; display: flex; overflow-x: auto;
+      gap: 4px;
+    }
+    .sidebar-section { display: flex; gap: 4px; margin-bottom: 0; padding: 0 12px; }
+    .sidebar-section-label { display: none; }
+    .sidebar-link { white-space: nowrap; padding: 7px 12px; font-size: 0.8rem; }
+    .modal-content { padding: 24px 20px; }
+  }
+  @media (max-width: 480px) {
+    .nav-links { display: none; }
+  }
+
+  /* body scroll lock */
+  body.modal-open { overflow: hidden; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Robert Janner</a>
+    <ul class="nav-links">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <h1>Thinking in systems, <em>designing for feelings</em></h1>
+  <p class="hero-description">
+      3+ years of experience wearing many hats at start ups and shipping indie games on PC, steamdeck and mobile.
+      Expertise in system and content design as well as in translating UX wireframes into polished, performant implementations in Unity and Unreal. 
+  </p>
+  <div class="hero-cta">
+    <a href="#projects" class="btn btn-primary">
+      <span>View My Work</span>
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10m-4-4 4 4-4 4"/></svg>
+    </a>
+    <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+  </div>
+</header>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <h2 class="section-title">Announced & released projects</h2>
+  <div class="projects-grid">
+
+    <!-- PROJECT CARD 1 -->
+    <div class="project-card" onclick="openModal('project1')">
+      <div class="project-media">
+          <div class="project-media">
+              <video src="https://i.imgur.com/LvK8c85.mp4" autoplay loop muted playsinline></video>
+          </div>
+      </div>
+      <div class="project-info">
+        <h3>Yield! Fall of Rome</h3>
+        <p>All the strategic depth of building up a civilization in play sessions of less than an hour.</p>
+        <div class="project-tags">
+          <span class="tag accent">Unity</span>
+          <span class="tag">C#</span>
+          <span class="tag">4X Strategy</span>
+        </div>
+        <a href="https://store.steampowered.com/app/1561960/Yield_Fall_of_Rome/" target="_blank" class="project-link" onclick="event.stopPropagation()">
+          View on Steam
+          <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 16 16"><path d="M4 12 12 4m0 0H5m7 0v7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <div class="card-hint">
+          View my impact
+          <svg fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" viewBox="0 0 16 16"><path d="M3 8h10m-4-4 4 4-4 4"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECT CARD 2 -->
+    <div class="project-card" onclick="openModal('project2')">
+      <div class="project-media">
+          <div class="project-media">
+              <video src="https://i.imgur.com/hJ7N1Sh.mp4" autoplay loop muted playsinline></video>
+          </div>
+      </div>
+      <div class="project-info">
+        <h3>Better Balanced Game</h3>
+        <p>A mod for Civilization VI subscribed to by 190.000+ players. Originally designed for multiplayer, now used for all game modes.</p>
+        <div class="project-tags">
+          <span class="tag accent">Steam Mod</span>
+          <span class="tag">LUA</span>
+          <span class="tag">4X Strategy</span>
+        </div>
+        <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2865001760&searchtext=bbg" target="_blank" class="project-link" onclick="event.stopPropagation()">
+          View on Steam
+          <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 16 16"><path d="M4 12 12 4m0 0H5m7 0v7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <div class="card-hint">
+          View my impact
+          <svg fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" viewBox="0 0 16 16"><path d="M3 8h10m-4-4 4 4-4 4"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECT CARD 3 -->
+    <div class="project-card" onclick="openModal('project3')">
+        <div class="project-media">
+            <video src="https://i.imgur.com/nioeZyv.mp4" autoplay loop muted playsinline></video>
+        </div>
+      <div class="project-info">
+        <h3>Project TT</h3>
+        <p>Soloproject - a modern take on Spore's Cell Stage, with roguelike mechanics and challenging boss fights.</p>
+        <div class="project-tags">
+          <span class="tag accent">Unity</span>
+          <span class="tag">C#</span>
+          <span class="tag">Roguelike</span>
+        </div>
+        <a href="https://your-project-3-link.com" target="_blank" class="project-link" onclick="event.stopPropagation()">
+          View on itch.io
+          <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 16 16"><path d="M4 12 12 4m0 0H5m7 0v7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <div class="card-hint">
+          View my process
+          <svg fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" viewBox="0 0 16 16"><path d="M3 8h10m-4-4 4 4-4 4"/></svg>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- MODAL: PROJECT 1                                -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-project1" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <div class="modal-header-icon">🎮</div>
+        <div>
+            <h2>Yield! Fall of Rome</h2>
+          <div class="modal-subtitle">Unity · C# · 4X Strategy</div>
+        </div>
+      </div>
+      <div class="modal-header-right">
+        <a href="https://store.steampowered.com/app/1561960/Yield_Fall_of_Rome/" target="_blank" class="modal-project-link" onclick="event.stopPropagation()">
+        View on Steam
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 16 16"><path d="M4 12 12 4m0 0H5m7 0v7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+        <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">Topics</div>
+          <button class="sidebar-link active" onclick="scrollToTopic(this, 'p1-topic1')">Building an Empire</button>
+          <button class="sidebar-link" onclick="scrollToTopic(this, 'p1-topic2')">Combat</button>
+          <button class="sidebar-link" onclick="scrollToTopic(this, 'p1-topic3')">Achieving Victory</button>
+          <button class="sidebar-link" onclick="scrollToTopic(this, 'p1-topic4')">Iteration Process</button>
+          <button class="sidebar-link" onclick="scrollToTopic(this, 'p1-topic5')">Engineering Tools</button>
+        </div>
+      </div>
+      <div class="modal-content" id="p1-content">
+
+          <div style="margin-bottom: 36px; padding: 20px 24px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;">
+              <div style="font-size: 0.72rem; font-weight: 600; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px;">My Role</div>
+              <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7; margin: 0;">System & Content Designer, Gameplay Engineer. Joined as the third team member and shaped core systems from prototype through Steam release over 2.5 years.</p>
+          </div>
+
+          <!-- TOPIC 1 -->
+          <div class="topic-section" id="p1-topic1">
+              <div class="topic-header">
+                  <div class="topic-number">01</div>
+                  <h3>Building an empire</h3>
+                  <span class="topic-type type-design">Design</span>
+              </div>
+              <div class="topic-body">
+                  <div class="topic-gif">
+                      <video src="https://i.imgur.com/OUnadA9.mp4" autoplay loop muted playsinline></video>
+                  </div>
+                  <div class="talking-points">
+                      <div class="talking-point">
+                          <div class="tp-bullet"></div>
+                          <div class="tp-content">
+                              <strong>"Decisions are made once"</strong>
+                              <span>We aligned on this principle early on as one of our main tools to keep game duration low compared to the 8 hour sessions our audience may know from the Civilization franchise. Yet we questioned it many times, because no undoing of mistakes means that to feel succesful, players need to have a working mental model of their options. This steepened Yield's learning curve and put constraints on content design to minimize the frustration around making permanent choices with limited information.</span>
+                          </div>
+                      </div>
+                      <div class="talking-point">
+                          <div class="tp-bullet"></div>
+                          <div class="tp-content">
+                              <strong>"Instant Rewards"</strong>
+                              <span>An incredibly satisfying human experience is becoming demonstrably better at something. Yield's instant rewards allow players to instantly realize when they have made a mistake (like not having enough gold left over to buy a unit) or when they have done well (like getting just enough population to grow your city). Instant rewards also make it easier to celebrate player actions: when a player builds a farm and their city grows as a result, Yield can match the importance of that event right then and there with celebratory feedback, whereas a game like Civ VI with yields per turn, is forced to disconnect the moment when a player invests in their growth from the moment that decision pays off.</span>
+                          </div>
+                      </div>
+                      <div class="talking-point">
+                          <div class="tp-bullet"></div>
+                          <div class="tp-content">
+                              <strong>Leaving your mark on the map</strong>
+                              <span>When I joined the team, improvements always rewarded as much production as population and skill in the economic snowball was expressed mostly by analyzing which improvement type you should unlock to reward you the most total yields given the land you could settle. I saw a huge opportunity to make improving your land in different ways also feel different and over time tied a lot of systems into this - realizing archetypes such as "The Wonder Builder", that players could lean into by focusing on improvements that reward production and policies that give rewards for building wonders in addition to a more defensive playstyle since expansion necessarily becomes slow when your economic engine revolves around buildings that cost a lot of resources. The result of these archetypes are empires that look visually distinct on the map.</span>
+                          </div>
+                      </div>
+                      <div class="talking-point">
+                          <div class="tp-bullet"></div>
+                          <div class="tp-content">
+                              <strong>Replayability</strong>
+                              <span>To keep players engaged, Yield heavily relies on players wanting to jump right into the next game to do things better and for stories worth telling to emerge organically in this process. To accomplish this, we invite new players to play Yield's campaign mode, which lets players live through historic events in a series of single missions, during each of which player's are able to make progress along many axes: leveling their king, making allies, unlocking all their milestones or unique units like the legion - each punctuated with highly evocative effects. It's near impossible to unlock everything in a single campaign and the combinatorics of all possible unlocks uniquely shape players capabilities to face the campaign's challenges. </span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- TOPIC 2 -->
+          <div class="topic-section" id="p1-topic2">
+              <div class="topic-header">
+                  <div class="topic-number">02</div>
+                  <h3>Combat</h3>
+                  <span class="topic-type type-design">Design</span>
+              </div>
+              <div class="topic-body">
+                  <div class="topic-gif">
+                      <video src="https://i.imgur.com/z42pu9X.mp4" autoplay loop muted playsinline></video>
+                  </div>
+                  <div class="talking-points">
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>Coloring the map</strong><span>Expanding your borders and engulfing other empires in your own is an experience many strategy game players describe as deeply satisfying. To allow for a meaningful back and forth within Yield's tight time budget, combat needed to start early, be focused and have big swings. We designed for this with powerful active abilities your king can unlock, unlockable units with unique gameplay niches and combat rules that are reminiscent of how chess pieces take out one another.</span></div></div>
+                      <div class="talking-point">
+                          <div class="tp-bullet"></div><div class="tp-content">
+                              <strong>Unit archetypes</strong><span>
+                                  One of our goals was to never let a unit that a player has built become useless over the course of the game. Other games achieve this by letting warriors upgrade into swordsmen while preserving all of the unit's modifiers, but we felt that the scope of Yield lent itself towards a different approach: making each unit type situationally useful. We felt like this approach succeeded when during a playtest a player built a horseman despite having the much more technologically advanced knights unlocked - both are great against units with low defense: knights can keep attacking when they score a kill and horsemen can attack and retreat out of danger immediately after. These 2 unit types are surprisingly useful together - horsemen would go in first and weaken the enemy before retreating and knights would finish them off.
+                                  Synergies between unit types inspired us to redesign our entire tech tree while keeping economic synergies balanced at the same time.
+                              </span>
+                          </div>
+                      </div>
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>Active abilities</strong><span>Designing these felt like bringing a moba into the 4X world and players loved them during playtests. While they delivered on the power fantasy of your king being an inspiring leader to your troops, balancing them for multiplayer was another beast. We found that requiring deep investment in your kings level to unlock the powerful active combat abilities helped both with balance and with building further endearment in your king during campaigns.</span></div></div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- TOPIC 3 -->
+          <div class="topic-section" id="p1-topic3">
+              <div class="topic-header">
+                  <div class="topic-number">03</div>
+                  <h3>Achieving Victory</h3>
+                  <span class="topic-type type-design">Design</span>
+              </div>
+              <div class="topic-body">
+                  <div class="topic-gif">
+                      <video src="https://i.imgur.com/48vyu7H.mp4" autoplay loop muted playsinline></video>
+                  </div>
+                  <div class="talking-points">
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>Finding meaning</strong><span>Before the current modular Crown system in which players can design themselves which actions should reward how many Crowns and how many of them are required for a victory, Yield used to be about achieving the highest score within a turn limit, with each action from building an improvement to capturing a city contributing to this score. While being easy to explain, this resulted in a grind for victory points, that ultimately made especially the last turns of each match feel slow and full of tedious tasks, while matches would also end at an arbitrary turn limit sometimes without any meaningful action and sometimes right in the middle of it. In looking for a new system we set our eyes on what actions in Yield felt dramatic enough to be game deciding and allowing for many possible narrative arcs for games, all centered around "achieving dominance" on the map.</span></div></div>
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>Technical Ownership</strong><span>This was the first major system that I owned the implementation of. It required a rewrite across how matches were created, new UI for allowing modification by players, how the game checked whether victory conditions were met, how we created the space to display modifiable victory conditions when they also need to be able to be displayed in different languages and how our AI pursued victory conditions or prevented the player from achieving them. It also brought up many questions of how transparent the AI's progress towards their own victory conditions should be for the player, as losing to events happening in undiscovered land were called out as frustrating by many.</span></div></div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- TOPIC 4 -->
+          <div class="topic-section" id="p1-topic4">
+              <div class="topic-header">
+                  <div class="topic-number">04</div>
+                  <h3>Iteration Process</h3>
+                  <span class="topic-type type-process">Process</span>
+              </div>
+              <div class="topic-body">
+                  <div class="topic-gif">
+                      <video src="https://i.imgur.com/oPy8nQ9.mp4" autoplay loop muted playsinline></video>
+                  </div>
+                  <div class="talking-points">
+                      <div class="talking-point">
+                          <div class="tp-bullet"></div><div class="tp-content">
+                              <strong>Consistent playtesting</strong><span>
+                                  Throughout development we kept reminding each other to never be embarrassed to show off our progress. This expressed itself through us joining every festival out there and gathering feedback live at Gamescom & PAX. At Gamescom in particular, we felt so moved by feedback, that we came back every day with a new build to test. Between playtests online that I led, we gained insights that drove +30% longer play duration and +20% higher replay intent.
+                              </span>
+                          </div>
+                      </div>
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>The game as our only artifact</strong><span>While I pioneered documentation standards to be used by our remote team, which later were also adopted by our publisher for release management, our focus in all our design conversations was on our prototype. This helped ground us in the principles we had established early on, which defined our niche in the market as we saw it, and made us iterate quickly. During this process we threw out many ideas like much more complex adjacency rules, armor as a unit property, a secondary currency that could be spent as tokens on special unlocks - similar to the current policies, a specialist system of farmers, craftsmen, merchants and nobles to modify improvements and many more. Had we not focused on our prototype as our only artifact, I think it likely that we would have made a much more complex game with much longer play sessions, making Yield less distinct from genre staples like Civilization or Old World.</span></div></div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- TOPIC 5 -->
+          <div class="topic-section" id="p1-topic5">
+              <div class="topic-header">
+                  <div class="topic-number">05</div>
+                  <h3>Engineering Tools</h3>
+                  <span class="topic-type type-technical">Technical</span>
+              </div>
+              <div class="topic-body">
+                  <div class="talking-points">
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>Testing</strong><span>Expanded our existing test kit to allow for AIs to play against each other in fully configurable scenarios, catching 73 bugs through thousands of simulated scenarios in the last 2 weeks before release that we would not have caught otherwise.</span></div></div>
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>Internal Match Editor</strong><span>Built an in-editor mode for devs to manually design maps, complete with AI starting locations, starting units, starting policies and milestone progress and many more settings. It also can be opened mid match in the editor to modify everything from city population to unit skills to spawning in units on the map for each faction. This tool easily cut the time I spent chasing down bugs and testing new abilites down to a third of what it used to be and coworkers gave similarly enthusiastic feedback throughout my development of this tool.</span></div></div>
+                  </div>
+              </div>
+          </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- MODAL: PROJECT 2                                -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-project2" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <div class="modal-header-icon">⚔️</div>
+        <div>
+          <h2>Project Two</h2>
+          <div class="modal-subtitle">Steam Mod · LUA · 4X Strategy</div>
+        </div>
+      </div>
+      <div class="modal-header-right">
+        <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2865001760" target="_blank" class="modal-project-link" onclick="event.stopPropagation()">
+        View on Steam
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 16 16"><path d="M4 12 12 4m0 0H5m7 0v7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+        <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">Topics</div>
+          <button class="sidebar-link active" onclick="scrollToTopic(this, 'p2-topic1')">Design contributions</button>
+          <button class="sidebar-link" onclick="scrollToTopic(this, 'p2-topic2')">Organization</button>
+        </div>
+      </div>
+      <div class="modal-content" id="p2-content">
+
+          <div style="margin-bottom: 36px; padding: 20px 24px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;">
+              <div style="font-size: 0.72rem; font-weight: 600; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px;">My Role</div>
+              <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7; margin: 0;">Contributed hundreds of design proposals, creative leadership, translations, code and shaped how our community of volunteers organized together.</p>
+          </div>
+
+          <div class="topic-section" id="p2-topic1">
+              <div class="topic-header"><div class="topic-number">01</div><h3>Design contributions</h3><span class="topic-type type-design">Design</span></div>
+              <div class="topic-body">
+                  <div class="topic-gif">
+                      <!-- Replace with: <img src="topic-6.gif" alt="Topic demo"> -->
+                      <div class="placeholder">
+                          <div class="placeholder-icon">🎬</div>
+                          <span>Topic GIF</span>
+                      </div>
+                  </div>
+                  <div class="talking-points">
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>Mission Statements</strong><span>
+                            These have changed over time under the pressure of a community yearning for new content - originally they had much stricter language around sticking to firaxis' vision, which was partially inspired by a wish for affiliation with firaxis by the owners of the mod at the time. But thanks to many challenging discussions, the mod team is now fully aligned with the wishes of the players using the mod.
+                            <ul style="margin-top: 8px; padding-left: 20px; list-style: disc;">
+                                <li style="margin-bottom: 4px;">Provide a leveled playing field in multiplayer regardless of your Civilization/Leader selection</li>
+                                <li style="margin-bottom: 4px;">Adjust unfair game mechanics or bugs while keeping the original design</li>
+                                <li style="margin-bottom: 4px;">Expand original mechanics to provide more strategic diversity</li>
+                                <li style="margin-bottom: 4px;">Improve upon the approachabilty for new players compared to the base game</li>
+                            </ul>
+                        </span></div></div>
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>A case study: China</strong><span>Firaxis blessed the chinese community with the ability to represent their country with 5 different leaders - providing a challenging task for any designer to give them each a unique gameplay niche, given the fact that they all share the chinese civilization ability, a unique unit and a unique improvement. To balance those gameplay niches against one another is another challenge, for which we will need to establish that each civilization has to operate within some fixed power budget, which is already split between mentioned unique units, improvements and the civilization ability, which each can't be too weak, less they feel underwhelming.<br><br> Therefore, to make each leader feel maximally unique, we would want to allocate as much of their power budget as possible into their leader ability. Here is where we run into the final challenge: kublai china shares a leader ability with kublai mongolia, which shares their civ ability with genghis khan - maximizing the impact of kublai's leader ability would mean that the mongolian civ ability would have to be made weaker or kublai mongolia would be an incredibly overpowered leader. Yet, the mongolian civ ability has been around since the game's release and has aged like fine wine over the years, commonly being regarded as one of the best designed and most iconic pieces of content.<br><br> My solution to this complex chain of dependencies was to propose to break an unspoken rule: by tying the rewards of china's unique improvement to which leader was constructing it, we gave each china a different reason to build the great wall and different gameplay consequences, thus each china could spread their power budget more evenly between civ and leader ability while maintaining a unique gameplay niche, thus aleviating balancing pressure on kublai mongolia and allowing us to keep the iconic mongolian ability.</span></div></div>                    
+                  </div>
+              </div>
+          </div>
+
+          <div class="topic-section" id="p2-topic2">
+              <div class="topic-header"><div class="topic-number">02</div><h3>Organization</h3><span class="topic-type type-process">Process</span></div>
+              <div class="topic-body">
+                  <div class="topic-gif">
+                      <div class="placeholder">
+                          <img src="https://i.imgur.com/PuJlZoR.png" alt="Topic demo">
+                          </div>
+                  </div>
+                  <div class="talking-points">
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>Managing egos</strong><span>One of the fun parts of working with fellow volunteers is that the most common reason for participation seems to be rooted in some form of need to be seen as great. People motivated by this have made amazing contributions to the BBG project, but they have also all burned out quick. I believe that great ideas deserve to be celebrated, yet design is about execution and a project of the scale of BBG requires people of all backgrounds to chime in and remix their best ideas; it does not lend itself well to anyone trying to see themselves as the sole hero of design proposals for any extended period of time. Over the years I've seen patterns in how people approach joining our team and I've improved at helping them manage their expectations and communication with the team to succeed.</span></div></div>
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>Decision makers</strong><span>Over the years we've experimented with many forms of finalizing design decisions: from polls to the whole community, to a single decision maker, to a counsel of specialists, to a small team overseeing and polling a larger group of specialists. Ultimately, I have felt that there is no single best structure and that the success metrics to actually pay attention to are how understood the community felt at large and how quickly the mod team could respond to emerging unhealthy metas. Doing well in both these metrics requires the decision makers to often and deeply engage with raised concerns and proposals - which is hard labor and may seem more boring then some elegant, perfect structure of organization that would finally make everyone happy, but it works and finding enjoyment in this is now one of the key qualities we look for in electing new decision makers.</span></div></div>
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>Data collection</strong><span>Data should be a key aspect of any balancing effort, yet it has long been a blindspot of BBG. Part of the reason for this is structural: the number of games payed at a top level is miniscule and casual games often have mixed skill levels, because the player population and the long match duration do not support skill-based matchmaking and therefore deliver inconsistent data. The key factor working in our favor however is time, Civ VI has been around for so long and many civs have not changed across multiple seasons, allowing for some quantitative insighs into winrates and other metrics. Beyond these efforts, we also collect qualitative data from our community via surveys some time after each major content patch. These insights helped guide us in large scale efforts such as rebalancing the base game's victory conditions.</span></div></div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- MODAL: PROJECT 3                                -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-project3" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <div class="modal-header-icon">🌍</div>
+        <div>
+          <h2>Project TT</h2>
+          <div class="modal-subtitle">Unity · C# · Roguelike</div>
+        </div>
+      </div>
+      <div class="modal-header-right">
+        <a href="https://your-project-3-link.com" target="_blank" class="modal-project-link" onclick="event.stopPropagation()">
+        View on itch.io
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 16 16"><path d="M4 12 12 4m0 0H5m7 0v7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+        <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-section-label">Topics</div>
+          <button class="sidebar-link active" onclick="scrollToTopic(this, 'p3-topic1')">Why this project</button>
+          <button class="sidebar-link" onclick="scrollToTopic(this, 'p3-topic2')">Finding an audience</button>
+          <button class="sidebar-link" onclick="scrollToTopic(this, 'p3-topic3')">Designing for momemtum-driven movement</button>
+        </div>
+      </div>
+      <div class="modal-content" id="p3-content">
+
+          <div style="margin-bottom: 36px; padding: 20px 24px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;">
+              <div style="font-size: 0.72rem; font-weight: 600; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px;">Foreword</div>
+              <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7; margin: 0;">While I am educating myself on how to effectively develop indie games, this project is a learning opportunity in many more ways to me. As such, I may spend more time on certain features like using particle systems to simulate wave effects than may be advisable at this stage of the project.</p>
+          </div>
+
+          <div class="topic-section" id="p3-topic1">
+              <div class="topic-header"><div class="topic-number">01</div><h3>Why this project</h3><span class="topic-type type-process">Process</span></div>
+              <div class="topic-body">
+                  <div class="topic-gif">
+                  </div>
+                  <div class="talking-points">
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>Hole in the market</strong><span>Being a fan of 4X games, I am very familiar with the game Spore, a hugely ambitious project simulating the journey from cellular life to galactic civilizations - it is a game that elicits nostalgia in many, spawning new projects inspired by its art and narrative even today. One of it's main critiques is that it feels like 3 loosely strung together and not fully fleshed out minigames. It's cell stage in particular is promising as a starting point for a new take - it's associated mechanics are reminiscent of recent hits capturing the cultural moment like vampire survivors or agar.io, yet stand out against a broader roguelike market that does not see a lot of skill expression in momentum-driven movement mechanics or melee combat.</span></div></div>
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>Why do so few roguelikes incorporate momentum-driven movement?</strong><span>Inertia, unresponsiveness and clunkyness are often called out as a point of frustration for players, yet these concepts are pivotal to gamefeel in racing games or making a weapon feel heavy in souls-likes. They enforce some amount of planning of movement inputs, which may subtract from the fast paced action of bullet hell games, which would rather reward players for fast reactions. Racing games and souls-likes both are also very careful to maintain the hope that you could still achieve 1st place or defeat the boss, no matter how many times you crashed or got hit. Roguelikes on the other hand, make mistakes very visible in the form of lost health, typically not easily regained and punishing through permadeath. Thus, to make a roguelike that succeeds in offering deeper skill expression in movement, my goals are to set expectations for players so that they expect to need to plan their movement inputs in advance and look forward to doing so well, as well as to design systems that allow players to easily move past their mistakes.</span></div></div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="topic-section" id="p3-topic2">
+              <div class="topic-header"><div class="topic-number">02</div><h3>Finding an audience</h3><span class="topic-type type-process">Process</span></div>
+              <div class="topic-body">
+                  <div class="topic-gif">                      
+                  </div>
+                  <div class="talking-points">
+                      <div class="talking-point">
+                          <div class="tp-bullet"></div><div class="tp-content">
+                              <strong>What other games does my audience play?</strong>
+                              <span>
+                                  <ul>
+                                      <li>Roguelikes such as Vampire Survivors, Brotato and The Binding of Isaac</li>
+                                      <li>Deckbuilders and autobattlers like Slay the Spire, Hearthstone, The Bazaar and TFT</li>
+                                      <li>Roblox and Fortnite game modes</li>
+                                  </ul>
+                              </span>
+                          </div>
+                      </div>
+                      <div class="talking-point">
+                          <div class="tp-bullet"></div><div class="tp-content">
+                              <strong>What are their motivations?</strong><span>
+                                  <ul>
+                                      <li>Creativity (how crazy of a character can I build?)</li>
+                                      <li>Powerfantasy fulfillment (getting progressively stronger and easily beating enemies when builds work out)</li>
+                                      <li>Mastery (learning to use the games mechanics to overcome its challenges and measuring that growth)</li>
+                                  </ul>
+                              </span>
+                          </div>
+                      </div>
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>Where can I find my audience?</strong><span>On social media, particularly youtube shorts and tik tok, but predominantly through steam's algorithm.</span></div></div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="topic-section" id="p3-topic3">
+              <div class="topic-header"><div class="topic-number">03</div><h3>Landing a vibe</h3><span class="topic-type type-design">Design</span></div>
+              <div class="topic-body">
+                  <div class="topic-gif">
+                      <video src="https://i.imgur.com/aIcDZhc.mp4" autoplay loop muted playsinline></video>
+                  </div>
+                  <div class="talking-points">
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>Artstyle</strong><span>I have considered going for "cartoonish", "cute", "eldritch horror" or "realistic" and looking at my audience it's clear that they are on the younger side and find themselves playing mostly cartoonish games with some leaning more towards blood and violence while others lean towards cute. I have decided to go with cartoonish, leaning towards cute myself as well, as it is more inline with expectations from spore, less problematic for content creators and has likely a greater overlap with relevant audiences than other "vibes". There is a huge contrast between cute and horror and I am considering using that as "wow factor" for marketing by including niche build orders that devolve into this horror aspect but would have to be deliberately chosen and come with appropriate warnings so that players unwilling to engage with it can avoid it.</span></div></div>
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>Narrative</strong><span>In a game about evolution, the questions: "Where from?" and "Where to?" have to be considered and they mirror humanity's own search for meaning. Leaving only vague hints as to your origin but defining a clear goal creates mystery that makes players want to learn more about this world, thus I am currently running with the idea of showing the player character as the product of aliens delivering life to a virgin world; yet you are not the only species that has thus arrived.</span></div></div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="topic-section" id="p3-topic4">
+              <div class="topic-header"><div class="topic-number">04</div><h3>Designing for momemtum-driven movement</h3><span class="topic-type type-design">Design</span></div>
+              <div class="topic-body">
+                  <div class="topic-gif">                      
+                  </div>
+                  <div class="talking-points">
+                      <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>Combat</strong><span>The setting of evolving cells already implies that combat may get up close and personal and a focus on explicitly colliding with enemies or avoiding collisions will allow for further skill expression than would be possible in a "bullet hell" type game - enemies changing their trajectory or speed is expected while projectiles doing the same may come off as surprising. Additionally there are many ways to make the angle of these collisions matter as different body parts collide. "Bullet hell" type games also tend to struggle with visual clarity as any given enemy may produce any number of projectiles, that need to be recognizable, if the player is supposed to avoid them. A focus on collisions frees up much of my visual real estate for effects that look dramatic.</span></div></div>
+                      <div class="talking-point">
+                          <div class="tp-bullet"></div><div class="tp-content">
+                              <strong>Health</strong><span>
+                                  Out of all the lose conditions in video games, health is easily the most commonly understood and I want to use words players already understand as much as possible given my nonexistent budget to explain niche game mechanics through marketing material.
+                                  Another mechanic players commonly understand from agar.io is their player character growing in size as they eat food or enemies.
+                                  Furthermore, I want to have high stakes near death moments that don't drag on - players should generally feel very safe to create contrast to when they are in mortal danger.
+                                  With my goal in mind of allowing players to move past their mistakes I give players enough health to take multiple hits and allow them to regain health by leveling up.
+                                  Players level up by eating enough food. The food required to advance to the next level gets progressively higher with player level.
+                                  When players take damage they lose both health and level, thus players that struggle and get hit a lot are always just a few bites of food away from regaining their health. Having a larger character model becomes an easily identifiable sign of doing well and players can always achieve a quick growth spurt from low levels by doing well for a short time or getting lucky, while maintaining that size becomes a skill expression as larger models are also easier to hit.
+                              </span>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="talking-point"><div class="tp-bullet"></div><div class="tp-content"><strong>Movement</strong><span>Inertia becomes incredibly frustrating when the time required to change direction in response to an object appearing at the edge of the screen gets smaller than the average human reaction time - I plan to counteract this by zooming out as players go faster and progressively accelerating turn speed by the magnitude of the change in direction the player wishes to make.</span></div></div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- SKILLS -->
+<section id="skills">
+  <h2 class="section-title">Skills</h2>
+  <div class="skills-grid">
+    <div class="skill-group">
+      <div class="skill-group-icon">🛠</div>
+      <h3>Engines & Frameworks</h3>
+      <ul class="skill-list"><li>Unity</li><li>Unreal Engine</li></ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-icon">💻</div>
+      <h3>Languages</h3>
+      <ul class="skill-list"><li>C#</li><li>C++</li><li>LUA</li><li>Python</li></ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-icon">🎨</div>
+      <h3>Design & Art</h3>
+      <ul class="skill-list"><li>Blender</li><li>InDesign</li><li>Photoshop</li><li>Figma</li><li>Illustrator</li></ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-icon">🔧</div>
+      <h3>Systems & Workflow</h3>
+      <ul class="skill-list"><li>Git / GitHub</li><li>CI/CD</li><li>Agile / Scrum</li><li>Perforce</li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <h2 class="section-title">A little about me</h2>
+  <div class="about-content">
+      <div class="about-photo"><img src="https://i.imgur.com/Fl8zpt4.png" alt="Yield! Fall of Rome gameplay"></div>
+      <div class="about-text">
+          <h3>Hi, I'm <span style="color: var(--accent);">Robert</span></h3>
+          <p>I've been making games since I was young and there were many that have held my fascination since: in Dark Souls 2, I earned the "No Deaths" and "No Bonfire" achievements, in Civ VI, I led 2 teams to World Cup Titles, for Skyrim, I first delved into modding.</p>
+          <p>I'm constantly looking to grow as a game developer, but am most experienced in content design. Currently looking for the next project to devote myself to.</p>
+      </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section">
+  <div class="section-label">Let's Connect</div>
+  <h2 class="section-title">Ready to build something great?</h2>
+  <p style="color: var(--text-secondary); font-size: 1rem; max-width: 420px; margin: 0 auto;">
+    I'm open to full-time roles, contract work, and game jam collabs. Drop me a line!
+  </p>
+  <div class="contact-links">
+    <a href="mailto:robert.janner98@gmail.com" class="contact-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 4 10 8 10-8"/></svg>
+      Email
+    </a>
+    <a href="https://www.linkedin.com/in/robert-janner-09a9452a6/" target="_blank" class="contact-link">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg>
+      LinkedIn
+    </a>
+    <a href="https://yourportfolio.itch.io" target="_blank" class="contact-link">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.13 1.338C2.08 1.96.02 4.328 0 4.95v1.03c0 1.303.6 2.426 1.59 2.837.59.244 1.472.322 2.09.069.927-.38 1.108-1.202 1.753-1.202.645 0 .752.804 1.622 1.202.58.266 1.39.175 1.99-.069.9-.364 1.29-1.452 1.29-2.706h.005c0 1.254.39 2.342 1.29 2.706.6.244 1.41.335 1.99.07.87-.399.977-1.203 1.622-1.203.645 0 .826.823 1.753 1.202.618.253 1.5.175 2.09-.069C20.4 8.406 21 7.283 21 5.98V4.95c-.02-.622-2.08-2.99-3.13-3.612H3.13zM5.3 10.19c-.96 0-1.654.443-2.244.943L3 20.792c1.796 1.398 4.17 2.208 7.5 2.208h3c3.33 0 5.704-.81 7.5-2.208l-.056-9.66c-.59-.5-1.284-.942-2.244-.942-.96 0-1.597.517-2.36 1.088C15.577 10.77 15 10.19 14 10.19s-1.577.58-2.34 1.088C10.897 10.707 10.26 10.19 9.3 10.19s-1.577.517-2.34 1.088C6.197 10.707 5.56 10.19 5.3 10.19zm2.2 3.81h5v5h-5v-5z"/></svg>
+      itch.io
+    </a>
+  </div>
+</section>
+
+<script>
+  // Nav scroll
+  const mainNav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    mainNav.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // Card reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 120);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.project-card').forEach(card => observer.observe(card));
+
+  // ── MODAL SYSTEM ──
+  let activeModal = null;
+
+  function openModal(projectId) {
+    const modal = document.getElementById('modal-' + projectId);
+    if (!modal) return;
+    activeModal = modal;
+    modal.classList.add('active');
+    document.body.classList.add('modal-open');
+
+    // Reset sidebar active state
+    const firstLink = modal.querySelector('.sidebar-link');
+    if (firstLink) {
+      modal.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+      firstLink.classList.add('active');
+    }
+
+    // Reset scroll
+    const content = modal.querySelector('.modal-content');
+    if (content) content.scrollTop = 0;
+
+    // Setup scroll spy
+    setupScrollSpy(modal);
+  }
+
+  function closeModal() {
+    if (!activeModal) return;
+    activeModal.classList.remove('active');
+    document.body.classList.remove('modal-open');
+    activeModal = null;
+  }
+
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  function scrollToTopic(btn, topicId) {
+    const topic = document.getElementById(topicId);
+    if (!topic) return;
+
+    // Update active sidebar link
+    const sidebar = btn.closest('.modal-sidebar');
+    sidebar.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Scroll into view
+    topic.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function setupScrollSpy(modal) {
+    const content = modal.querySelector('.modal-content');
+    const sections = modal.querySelectorAll('.topic-section');
+    const links = modal.querySelectorAll('.sidebar-link');
+
+    if (!content || sections.length === 0) return;
+
+    content.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        const contentRect = content.getBoundingClientRect();
+        if (rect.top - contentRect.top < 100) {
+          current = section.id;
+        }
+      });
+
+      if (current) {
+        links.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('onclick')?.includes(current)) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }
+</script>
+</body>
+</html>
